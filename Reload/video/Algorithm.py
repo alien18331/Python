@@ -7,8 +7,9 @@ class Algorithm():
 		# self.in2 = in2
         
 	def do_func(self, frame):
-				
-		result = frame
+		
+		hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+		result = hsv
 		return (result)
 	
 	# def __del__(self):

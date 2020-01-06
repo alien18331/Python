@@ -4,6 +4,7 @@ import threading
 import time
 import sys
 import imp
+import datetime
 
 EXIT = False
 
@@ -34,12 +35,15 @@ class FileMonitor(threading.Thread):
             global EXIT
             EXIT = True
             while EXIT:
+                receiveTime = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
                 with self._lock:
                     for file in self._file2module:
                         if self.get_modified_time(file) != self._modified_time[file]:
-                            print("Reload module")
+                            # print("Detect Algorithm Updated..!")
+                            print("{0} Program Memory Reallocate done!!".format(receiveTime))
                             imp.reload(self._file2module[file])
                             self._modified_time[file] = self.get_modified_time(file)
+                            print("{0} Program update done!!\n".format(receiveTime))
                 
                 time.sleep(self._interval)
         except KeyboardInterrupt as error:

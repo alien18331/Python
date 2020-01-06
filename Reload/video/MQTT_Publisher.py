@@ -6,12 +6,16 @@ This is a temporary script file.
 """
 
 # Publisher.py
+import sys
 import paho.mqtt.client as mqtt
 
-MQTT_ServerIP = "localhost"
+MQTT_ServerIP = "10.192.249.136"
 MQTT_ServerPort = 1883 #port
-MQTT_TopicName = "STATUS" #TOPIC name
+MQTT_TopicName = "MODE" #TOPIC name
 
-mqttc = mqtt.Client("python_pub")
+val = str(sys.argv[1])
+print(val)
+
+mqttc = mqtt.Client("Test")
 mqttc.connect(MQTT_ServerIP, MQTT_ServerPort)
-mqttc.publish(MQTT_TopicName, "Hello World")
+mqttc.publish(MQTT_TopicName, val)
