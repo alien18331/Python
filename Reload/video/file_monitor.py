@@ -40,10 +40,10 @@ class FileMonitor(threading.Thread):
                     for file in self._file2module:
                         if self.get_modified_time(file) != self._modified_time[file]:
                             # print("Detect Algorithm Updated..!")
-                            print("{0} Program Memory Reallocate done!!".format(receiveTime))
+                            print("{0} {1} Program Memory Reallocate done!!".format(sys.argv[0], receiveTime))
                             imp.reload(self._file2module[file])
                             self._modified_time[file] = self.get_modified_time(file)
-                            print("{0} Program update done!!\n".format(receiveTime))
+                            print("{0} {1} Program update done!!\n".format(sys.argv[0], receiveTime))
                 
                 time.sleep(self._interval)
         except KeyboardInterrupt as error:

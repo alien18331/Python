@@ -1,5 +1,6 @@
 
 import cv2
+import numpy as np
 
 class Algorithm():
 	# def __init__(self, in1 = 10, in2 = 20):
@@ -8,8 +9,11 @@ class Algorithm():
         
 	def do_func(self, frame):
 		
-		hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-		result = hsv
+		rows, cols, channels = frame.shape
+		M = cv2.getRotationMatrix2D((cols/2, rows/2), 180, 1)
+		dst = cv2.warpAffine(frame, M, (cols, rows))
+		
+		result = dst
 		return (result)
 	
 	# def __del__(self):

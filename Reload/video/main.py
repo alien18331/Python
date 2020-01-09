@@ -17,49 +17,51 @@ from file_monitor import FileMonitor
 camDevID = 0
 exeName = ""
 
+global fm
+
 def on_connect(client, userdata, flags, rc):
 	global exeName
 	
 	print("[{0}] Connected with result code ".format(exeName) + str(rc))
-	# client.subscribe("STATUS")
-	client.subscribe([("MODE",0)])
+	# client.subscribe("STATUS") # singal sub
+	client.subscribe([("MODE",0)]) # multi sub
 
 def on_message(client, userdata, msg):
 	# print(msg.topic + " {}".format(msg.payload.decode("utf-8")))	
-	print("Detect Algorithm Updated..!")
-	print("Waiting for reallocate memory...")
+	print("[{0}] Detect Algorithm Updated..!".format(sys.argv[0]))
+	print("[{0}] Waiting for reallocate memory...".format(sys.argv[0]))
 
-def Camera():	
-	while True:			
-		ret, frame = cap.read()
-		
-		algo = Algorithm.Algorithm()
-		nFrame = algo.do_func(frame)
-		
-		cv2.imshow('CCD LIVE', nFrame) # update frame
-
-		if cv2.waitKey(1) & 0xFF == ord('q'):
-			break
+def Camera():
+	global fm	
+	try:
+		while True:			
+			ret, frame = cap.read()
 			
-		print("FPS: %d" %cap.get(cv2.CAP_PROP_FPS), end = '\r')
+			algo = Algorithm.Algorithm()
+			nFrame = algo.do_func(frame)
+			
+			cv2.imshow('CCD LIVE', nFrame) # update frame
+
+			if cv2.waitKey(1) & 0xFF == ord('q'):
+				break
+				
+			print("FPS: %d" %cap.get(cv2.CAP_PROP_FPS), end = '\r')
+			
+	except KeyboardInterrupt:
+		fm.stop_monitor()
+		cap.release()
+		cv2.destroyAllWindows()
 		
-	print("\nEnd Camera..!")
-	
-	cap.release()
-	cv2.destroyAllWindows()
+		print("\n[{0}] End Camera..!".format(sys.argv[0]))
 
 # start-up
 if __name__ == "__main__":	
 	exeName = main.__file__
-	
-	# check folder
-	# if not (os.path.isdir(chkDir)):
-		# os.mkdir(chkDir)
-			
+				
 	# camera obj
 	cap = cv2.VideoCapture(camDevID) 
 	if not (cap.isOpened()):
-		print("Camera Open Fail..!")
+		print("[{0}] Camera Open Fail..!".format(sys.argv[0]))
 		sys.exit(0)
 	
 	# file monitor
@@ -67,19 +69,25 @@ if __name__ == "__main__":
 	fm.add_file("./Algorithm.py", Algorithm)
 	fm.start()
 	
-	# mqtt
-	try:	
-		camThr = threading.Thread(target = Camera)
-		camThr.start()
-		
-		# subscribe
-		# client = mqtt.Client()
-		# client.on_connect = on_connect
-		# client.on_message = on_message
-		# client.connect("localhost", 1883, 60)
-		# client.loop_forever()
-		
+	try:
+		print("[{0}] ==== Camera Activated ====".format(sys.argv[0]))
+		while True:			
+			ret, frame = cap.read()
+			
+			algo = Algorithm.Algorithm()
+			nFrame = algo.do_func(frame)
+			
+			cv2.imshow('CCD LIVE', nFrame) # update frame
+
+			if cv2.waitKey(1) & 0xFF == ord('q'):
+				break
+				
+			print("FPS: %d" %cap.get(cv2.CAP_PROP_FPS), end = '\r')
+			
 	except KeyboardInterrupt:
-		_stop = True
-		camThr.join()
-		print("End process!\n")
+		fm.stop_monitor()
+		print("\n[{0}] File Manager Stop..!".format(sys.argv[0]))
+		cap.release()
+		cv2.destroyAllWindows()
+		print("[{0}] OpenCV Stop..!".format(sys.argv[0]))
+		print("\n[{0}] End Process!!\n".format(sys.argv[0]))
