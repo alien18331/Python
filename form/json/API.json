@@ -1,0 +1,16 @@
+{
+  "MQTT_ServerIP": "127.0.0.1",
+  "MQTT_ServerPort": 1883,
+  "MAIN": {
+    "TP_Alive": "ALIVE",
+    "TP_State": "STATE",
+    "nodeList":[
+      "TMP",
+      "TMP1"
+    ]
+  },
+  "TMP": {
+    "TP_Alive": "ALIVE",
+    "TP_State": "STATE"
+  }
+}
