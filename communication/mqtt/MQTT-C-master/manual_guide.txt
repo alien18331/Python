@@ -1,0 +1,15 @@
+## install cmocka
+https://cmocka.org/files/
+mkdir build
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Debug ..
+make
+sudo make install
+
+## Test
+cd example
+./simple_test
+
+## MQTT-C
+make all
+cd bin
+./simple_publisher 
