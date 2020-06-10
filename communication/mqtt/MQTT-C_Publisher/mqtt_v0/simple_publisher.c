@@ -7,8 +7,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <mqtt.h>
-#include "templates/posix_sockets.h"
+#include "mqtt.h"
+#include "posix_sockets.h"
 
 
 /**
@@ -16,7 +16,7 @@
  * 
  * @note This function is not used in this example. 
  */
-void publish_callback(void** unused, struct mqtt_response_publish *published);
+//void publish_callback(void** unused, struct mqtt_response_publish *published);
 
 /**
  * @brief The client's refresher. This function triggers back-end routines to 
@@ -42,27 +42,6 @@ int main(int argc, const char *argv[])
     const char* port = "1883";
     const char* topic = "STATUS";
 
-    /* get address (argv[1] if present) */
-    //if (argc > 1) {
-        //addr = argv[1];
-    //} else {
-        //addr = "127.0.0.1";
-    //}
-
-    /* get port number (argv[2] if present) */
-    //if (argc > 2) {
-        //port = argv[2];
-    //} else {
-        //port = "1883";
-    //}
-
-    /* get the topic name to publish */
-    //if (argc > 3) {
-        //topic = argv[3];
-    //} else {
-        //topic = "STATUS";
-    //}
-
     /* open the non-blocking TCP socket (connecting to the broker) */
     int sockfd = open_nb_socket(addr, port);
 
@@ -75,11 +54,15 @@ int main(int argc, const char *argv[])
     struct mqtt_client client;
     uint8_t sendbuf[2048]; /* sendbuf should be large enough to hold multiple whole mqtt messages */
     uint8_t recvbuf[1024]; /* recvbuf should be large enough any whole mqtt message expected to be received */
-    mqtt_init(&client, sockfd, sendbuf, sizeof(sendbuf), recvbuf, sizeof(recvbuf), publish_callback);
+    //mqtt_init(&client, sockfd, sendbuf, sizeof(sendbuf), recvbuf, sizeof(recvbuf), publish_callback);
+    mqtt_init(&client, sockfd, sendbuf, sizeof(sendbuf), recvbuf, sizeof(recvbuf));
+    
     /* Create an anonymous session */
     const char* client_id = NULL;
+    
     /* Ensure we have a clean session */
     uint8_t connect_flags = MQTT_CONNECT_CLEAN_SESSION;
+    
     /* Send connection request to the broker. */
     mqtt_connect(&client, client_id, NULL, NULL, 0, NULL, NULL, connect_flags, 400);
 
@@ -141,10 +124,10 @@ void exit_example(int status, int sockfd, pthread_t *client_daemon)
 
 
 
-void publish_callback(void** unused, struct mqtt_response_publish *published) 
-{
-    /* not used in this example */
-}
+//void publish_callback(void** unused, struct mqtt_response_publish *published) 
+//{
+    ///* not used in this example */
+//}
 
 void* client_refresher(void* client)
 {
