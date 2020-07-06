@@ -10,8 +10,8 @@ class LongOp():
     def run(self, x):
         y = 1000
         result = self.math(x, y)
-        print("(A,B) = ({0},{1}), {0} + {1} = {2}".format(x, y, result))
+        print("(A,B) = ({0},{1}), {0} * {1} = {2}".format(x, y, result))
         return result
         
     def math(self, a, b):
-        return a+b
+        return a*b
