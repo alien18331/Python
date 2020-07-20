@@ -17,4 +17,4 @@ try:
         
 except (KeyboardInterrupt, SystemExit):
     GPIO.cleanup()
-    print("exit")
+    print("\nexit")
