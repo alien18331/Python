@@ -3,7 +3,8 @@
 import RPi.GPIO as GPIO
 import time
 
-GPIO.setmode(GPIO.BCM)
+# ~ GPIO.setmode(GPIO.BCM) # BCM
+GPIO.setmode(GPIO.BOARD) # board
 GPIO.setup(21,GPIO.OUT)
 
 while True:
